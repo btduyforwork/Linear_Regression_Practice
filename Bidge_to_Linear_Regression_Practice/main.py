@@ -56,18 +56,22 @@ def simple_linear_regression():
         b=b_new
         plot_chart(w, b)
 
+# One-sample training for Linear Regression
 def one_sample_training():
     # Initialization
     b = 0.4
     w=-0.34
     lr=0.01
+    
     # How long
     epoch_max=10
     data_size=4
+    
     # Training Data
-    X_values=[6.7, 4.7, 3.5, 5.5]
+    X_values=[6.7, 4.6, 3.5, 5.5]
     y_values=[9.1, 5.9, 4.6, 6.7]
     losses=[]
+
     for epoch in range(epoch_max):
         for i in range(data_size):
             x=X_values[i]
@@ -86,8 +90,49 @@ def one_sample_training():
     plt.plot(losses)
     plt.show()
 
+
+# Mini batch training for Linear Regression
+def mini_batch_training(m=2):
+    # Initialization
+    b = 0.04
+    w=-0.34
+    lr=0.02
+    # How long
+    epoch_max=10
+    data_size=4
+    # Training Data
+    X_values=[6.7, 4.6, 3.5, 5.5]
+    y_values=[9.1, 5.9, 4.6, 6.7]
+    N=4
+    losses=[]
+    # Implementation
+    for _ in range(epoch_max):
+        for i in range(0, N, m):
+            dw, db = [], []
+            loss_total=0
+            for j in range(m):
+                X=X_values[i+j]
+                y=y_values[i+j]
+
+                y_hat=predict(X, w, b)
+                loss_total+=compute_loss(y_hat, y)
+                
+                grad_w, grad_b = compute_gradient(y_hat, y, X)
+                dw.append(grad_w)
+                db.append(grad_b)
+
+            losses.append(loss_total/m)
+            combined_dw=sum(dw)/m
+            combined_db=sum(db)/m
+            w, b = update_paramters(w, b, lr, combined_dw, combined_db)
+
+    plt.plot(losses)
+    plt.show()
+
 def main() -> None:
     # simple_linear_regression()
-    one_sample_training()
+    mini_batch_training()
+
+
 if __name__ == "__main__":
     main()
