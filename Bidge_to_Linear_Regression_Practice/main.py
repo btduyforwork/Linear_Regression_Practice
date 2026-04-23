@@ -91,7 +91,7 @@ def one_sample_training():
     plt.show()
 
 
-# Mini batch training for Linear Regression
+# k-batch training for Linear Regression
 def mini_batch_training(m=2):
     # Initialization
     b = 0.04
@@ -131,7 +131,8 @@ def mini_batch_training(m=2):
 
 def main() -> None:
     # simple_linear_regression()
-    mini_batch_training()
+    # mini_batch_training(2)
+    mini_batch_training(4)
 
 
 if __name__ == "__main__":
