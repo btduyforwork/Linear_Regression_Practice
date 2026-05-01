@@ -21,18 +21,19 @@ def compute_loss(y_hat, y):
     return (y_hat-y)**2
 
 # Plotting the chart
-def plot_chart( w, b, x_values=[3.5, 4.6, 5.5, 6.7], y_values=[4.6, 5.9, 6.7, 9.1]) -> None:
-    line_x = [3.0, 7.0]
+def plot_chart(w, b, x_values, y_values):
+    line_x = [min(x_values) - 1, max(x_values) + 1]
     line_y = [predict(x, w, b) for x in line_x]
 
-    plt.scatter(x_values, y_values)
+    plt.figure(figsize=(6, 4))
+    plt.scatter(x_values, y_values, color="blue")
     plt.plot(line_x, line_y, color="red")
 
     equation = f"y = {w:.2f}x + {b:.2f}"
-    plt.text(line_x[0]+0.7, line_y[0] + 0.5, equation, color="red")
+    plt.text(line_x[0] + 0.2, line_y[0] + 1, equation, color="red")
 
-    plt.xlim(2.8, 7.2)
-    plt.ylim(-3, 9.6)
+    plt.xlim(min(x_values) - 0.5, max(x_values) + 0.5)
+    plt.ylim(min(y_values) - 5, max(y_values) + 5)
     plt.show()
 
 def simple_linear_regression():
@@ -90,17 +91,17 @@ def one_sample_training():
 
 
 # k-batch training for Linear Regression
-def mini_batch_training(m=2):
+def mini_batch_training(m=8):
     # Initialization
     b = 0.04
     w=-0.34
-    lr=0.02
+    lr=0.01
     # How long
-    epoch_max=10
-    data_size=4
+    epoch_max=30
+    data_size=7
     # Training Data
-    X_values=[6.7, 4.6, 3.5, 5.5]
-    y_values=[9.1, 5.9, 4.6, 6.7]
+    X_values = [1, 2, 3, 4, 5, 6, 7, 8]
+    y_values = [2, 3, 4, 5, 6, 7, 8, 40]
     N=4
     losses=[]
     # Implementation
@@ -123,14 +124,15 @@ def mini_batch_training(m=2):
             combined_dw=sum(dw)/m
             combined_db=sum(db)/m
             w, b = update_paramters(w, b, lr, combined_dw, combined_db)
-
+        
+    plot_chart(w, b, X_values, y_values)
     plt.plot(losses)
     plt.show()
 
 def main() -> None:
     # simple_linear_regression()
     # mini_batch_training(2)
-    mini_batch_training(4)
+    mini_batch_training()
 
 
 if __name__ == "__main__":
